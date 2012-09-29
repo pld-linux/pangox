@@ -1,0 +1,57 @@
+--- pango-1.30.1/configure.in.orig	2012-06-05 12:11:41.000000000 +0200
++++ pango-1.30.1/configure.in	2012-09-29 08:24:04.896940538 +0200
+@@ -244,36 +244,9 @@
+ have_freetype=false
+ have_xft=false
+ 
+-#
+-# Check for fontconfig
+-#
+-PKG_CHECK_MODULES(FONTCONFIG, fontconfig >= 2.5.0, have_fontconfig=true, AC_MSG_RESULT([no]))
+-
+-#
+-# Checks for FreeType
+-#
+-if $have_fontconfig ; then
+-  # The first version of freetype with a .pc file is 2.1.5.  That's recent
+-  # enough for all the functions we use I guess.  No version check needed.
+-  PKG_CHECK_MODULES(FREETYPE, freetype2, have_freetype=true, AC_MSG_RESULT([no]))
+-fi
+-if $have_freetype ; then
+-  AC_DEFINE(HAVE_FREETYPE, 1, [Have FreeType 2 library])
+-  # By freetype, we really always mean freetype+fontconfig
+-  FREETYPE_CFLAGS="$FREETYPE_CFLAGS $FONTCONFIG_CFLAGS"
+-  FREETYPE_LIBS="$FREETYPE_LIBS $FONTCONFIG_LIBS"
+-fi
++PKG_PROG_PKG_CONFIG
+ AM_CONDITIONAL(HAVE_FREETYPE, $have_freetype)
+ 
+-#
+-# Checks for Xft/XRender
+-#
+-if $have_x && $have_freetype ; then
+-  PKG_CHECK_MODULES(XFT, xft >= 2.0.0 xrender, have_xft=true, AC_MSG_RESULT([no]))
+-fi
+-if $have_xft ; then
+-  AC_DEFINE(HAVE_XFT, 1, [Have Xft library])
+-fi
+ AM_CONDITIONAL(HAVE_XFT, $have_xft)
+ 
+ #
+@@ -368,8 +340,6 @@
+ have_cairo_atsui=false
+ cairo_required=1.7.6
+ 
+-PKG_CHECK_MODULES(CAIRO, cairo >= $cairo_required, have_cairo=true, AC_MSG_RESULT([no]))
+-   
+ if $have_cairo ; then
+   pango_save_libs=$LIBS
+   LIBS="$LIBS $CAIRO_LIBS"
+@@ -487,7 +457,6 @@
+ #
+ have_libthai=false
+ LIBTHAI_REQUIRED_VERSION=0.1.9
+-PKG_CHECK_MODULES(LIBTHAI, libthai >= $LIBTHAI_REQUIRED_VERSION, have_libthai=true, :)
+ 
+ #
+ # Checks for GObject Introspection

@@ -1,0 +1,72 @@
+diff -uNr pango-1.30.1/modules/Makefile.am pango-1.30.1.new/modules/Makefile.am
+--- pango-1.30.1/modules/Makefile.am	2011-08-16 03:11:08.000000000 +0200
++++ pango-1.30.1.new/modules/Makefile.am	2012-06-11 16:30:03.042700937 +0200
+@@ -28,15 +28,15 @@
+ 
+ install-data-local: $(top_builddir)/pango/pango-querymodules$(EXEEXT)
+ 	@if $(RUN_QUERY_MODULES_TEST) && test -z "$(DESTDIR)" ; then 	\
+-	  echo $(mkinstalldirs) $(DESTDIR)$(sysconfdir)/pango \&\& 	\
++	  echo $(mkinstalldirs) $(DESTDIR)$(sysconfdir) \&\& 	\
+ 	  $(top_builddir)/pango/pango-querymodules$(EXEEXT) 		\
+-		\> $(DESTDIR)$(sysconfdir)/pango/pango.modules ;	\
+-	  $(mkinstalldirs) $(DESTDIR)$(sysconfdir)/pango && 		\
++		\> $(DESTDIR)$(sysconfdir)/pango.modules ;	\
++	  $(mkinstalldirs) $(DESTDIR)$(sysconfdir) && 		\
+ 	  $(top_builddir)/pango/pango-querymodules$(EXEEXT) 		\
+-		> $(DESTDIR)$(sysconfdir)/pango/pango.modules ;		\
++		> $(DESTDIR)$(sysconfdir)/pango.modules ;		\
+ 	else								\
+ 	  echo "***" ; 							\
+-	  echo "*** Warning: $(sysconfdir)/pango/pango.modules" ; 	\
++	  echo "*** Warning: $(sysconfdir)/pango.modules" ; 	\
+ 	  echo "*** not created" ; 					\
+ 	  echo "*** Generate this file on the target system" ; 		\
+ 	  echo "*** using pango-querymodules" ; 			\
+@@ -44,7 +44,7 @@
+ 	fi
+ 
+ uninstall-local:
+-	$(RM) $(DESTDIR)$(sysconfdir)/pango/pango.modules
++	$(RM) $(DESTDIR)$(sysconfdir)/pango.modules
+ 
+ pango.modules:						\
+ 	$(SUBDIRS)					\
+diff -uNr pango-1.30.1/pango/Makefile.am pango-1.30.1.new/pango/Makefile.am
+--- pango-1.30.1/pango/Makefile.am	2012-04-25 22:10:36.000000000 +0200
++++ pango-1.30.1.new/pango/Makefile.am	2012-06-11 16:30:03.042700937 +0200
+@@ -181,7 +181,7 @@
+ if HAVE_X
+ pangoinclude_HEADERS += $(pangox_headers)
+ lib_LTLIBRARIES += libpangox-1.0.la
+-aliasdir = $(sysconfdir)/pango
++aliasdir = $(sysconfdir)
+ alias_DATA = pangox.aliases
+ endif
+ 
+diff -uNr pango-1.30.1/pango/pango-utils.c pango-1.30.1.new/pango/pango-utils.c
+--- pango-1.30.1/pango/pango-utils.c	2012-06-02 04:43:05.000000000 +0200
++++ pango-1.30.1.new/pango/pango-utils.c	2012-06-11 16:30:03.046034427 +0200
+@@ -740,7 +740,7 @@
+       if (sysconfdir != NULL)
+ 	result = g_build_filename (sysconfdir, "pango", NULL);
+       else
+-	result = SYSCONFDIR "/pango";
++	result = SYSCONFDIR;
+ #endif
+     }
+   return result;
+diff -uNr pango-1.30.1/pango/pangox-fontmap.c pango-1.30.1.new/pango/pangox-fontmap.c
+--- pango-1.30.1/pango/pangox-fontmap.c	2012-05-23 04:57:52.000000000 +0200
++++ pango-1.30.1.new/pango/pangox-fontmap.c	2012-06-11 16:33:37.852789261 +0200
+@@ -912,9 +912,9 @@
+ 
+   if (!files_str)
+     {
+-      user_file = g_build_filename (g_get_user_config_dir (), "pango", "pangox.aliases", NULL);
++      user_file = g_build_filename (g_get_user_config_dir (), "pangox.aliases", NULL);
+ 
+-      files_str = g_strconcat (user_file, ":" SYSCONFDIR "/pango/pangox.aliases", NULL);
++      files_str = g_strconcat (user_file, ":" SYSCONFDIR "/pangox.aliases", NULL);
+       g_free (user_file);
+     }
+ 
