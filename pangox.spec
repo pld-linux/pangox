@@ -1,4 +1,5 @@
 # NOTE: this package provides libpangox (relying on newer libpango) for old applications
+# using old pango sources; if it's possible, use pangox-compat instead (or don't use pangox at all)
 #
 # Conditional build:
 %bcond_without	static_libs	# don't build static library
