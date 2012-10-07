@@ -1,4 +1,3 @@
-# $Revision: 1.236 $, $Date: 2012/06/11 14:39:51 $
 # NOTE: this package provides libpangox (relying on newer libpango) for old applications
 #
 # Conditional build:
